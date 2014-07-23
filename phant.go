@@ -2,10 +2,10 @@ package phant
 
 import (
   "encoding/json"
+  "io"
   "io/ioutil"
   "net/http"
   "net/url"
-  "strings"
 )
 
 // Client is the main type
@@ -16,17 +16,17 @@ type Client struct {
   endpointPrefix string
 }
 
-type postResponse struct {
+type standardResponse struct {
   Message string `json:"message"`
   Success bool   `json:"success"`
 }
 
-type postError struct {
+type standardError struct {
   message string
 }
 
-func (p postError) Error() string {
-  return p.message
+func (e standardError) Error() string {
+  return e.message
 }
 
 const (
@@ -45,7 +45,7 @@ func Create(publicKey, privateKey string) *Client {
 }
 
 func (c *Client) postUrl() string {
-  return c.endpointPrefix + c.publicKey + ".json"
+  return c.endpointPrefix + c.publicKey
 }
 
 func convertMapStringStringToUrlValues(f map[string]string) url.Values {
@@ -58,46 +58,55 @@ func convertMapStringStringToUrlValues(f map[string]string) url.Values {
   return v
 }
 
-// Post will post a map of strings to phant
-func (c *Client) Post(fields map[string]string) error {
-  bodyReader := strings.NewReader(convertMapStringStringToUrlValues(fields).Encode())
+func createHttpRequest(reqType, url string, reader io.Reader) (*http.Request, error) {
+  request, err := http.NewRequest(reqType, url, reader)
 
-  client := &http.Client{}
-  request, err := http.NewRequest("POST", c.postUrl(), bodyReader)
-
-  if err != nil {
-    return err
+  if err == nil {
+    request.Header.Set("User-Agent", version)
+    request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+    request.Header.Set("Accept", "application/json")
   }
 
-  request.Header.Set("User-Agent", version)
-  request.Header.Set("Phant-Private-Key", c.privateKey)
-  request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+  return request, err
+}
 
+func (c *Client) createHttpRequestWithPrivateKey(reqType, url string, reader io.Reader) (*http.Request, error) {
+  request, err := createHttpRequest(reqType, url, reader)
+
+  if err == nil {
+    request.Header.Set("Phant-Private-Key", c.privateKey)
+  }
+
+  return request, err
+}
+
+func doAndParseRequest(request *http.Request) (standardResponse, error) {
+  client := &http.Client{}
   res, err := client.Do(request)
 
+  postRes := standardResponse{}
+
   if err != nil {
-    return err
+    return postRes, err
   }
 
   defer res.Body.Close()
   bodyBytes, err := ioutil.ReadAll(res.Body)
 
   if err != nil {
-    return err
+    return postRes, err
   }
-
-  postRes := postResponse{}
 
   err = json.Unmarshal(bodyBytes, &postRes)
 
   if err != nil {
-    return err
+    return postRes, err
   }
 
   // look at the res
   if postRes.Success == false {
-    return postError{postRes.Message}
+    return postRes, standardError{postRes.Message}
   }
 
-  return nil
+  return postRes, nil
 }

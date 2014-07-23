@@ -39,42 +39,17 @@ func TestCreate(t *testing.T) {
   }
 }
 
-func TestSuccessPost(t *testing.T) {
-  setup()
-  defer teardown()
-
+// some helpers
+func handleSuccess() {
   mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusOK)
     fmt.Fprintf(w, `{"success":true,"message":"ok"}`)
   })
-
-  err := client.Post(map[string]string{
-    "pow": "pow",
-  })
-
-  if err != nil {
-    t.Error("expected no error")
-  }
 }
 
-func TestFailPost(t *testing.T) {
-  setup()
-  defer teardown()
-
+func handleError() {
   mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusBadRequest)
     fmt.Fprintf(w, `{"success":false,"message":"not ok"}`)
   })
-
-  err := client.Post(map[string]string{
-    "pow": "pow",
-  })
-
-  if err == nil {
-    t.Error("expected error")
-  }
-
-  if err.Error() != "not ok" {
-    t.Error("expected 'not ok' in .Error()")
-  }
 }
