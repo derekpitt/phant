@@ -29,9 +29,10 @@ func (e standardError) Error() string {
   return e.message
 }
 
+var defaultEndpointPrefix = "https://data.sparkfun.com/"
+
 const (
-  defaultEndpointPrefix = "https://data.sparkfun.com/"
-  version               = "derekpitt/phant/0.0.1"
+  version = "derekpitt/phant/0.0.1"
 )
 
 // Create creates a client for phant
@@ -76,18 +77,21 @@ func (c *Client) createHttpRequestWithPrivateKey(reqType, url string, reader io.
   return request, err
 }
 
-func doAndParseRequest(request *http.Request) (standardResponse, error) {
+func getBodyBytes(request *http.Request) ([]byte, error) {
   client := &http.Client{}
   res, err := client.Do(request)
 
-  postRes := standardResponse{}
-
   if err != nil {
-    return postRes, err
+    return nil, err
   }
 
   defer res.Body.Close()
-  bodyBytes, err := ioutil.ReadAll(res.Body)
+  return ioutil.ReadAll(res.Body)
+}
+
+func doAndParseRequest(request *http.Request) (standardResponse, error) {
+  postRes := standardResponse{}
+  bodyBytes, err := getBodyBytes(request)
 
   if err != nil {
     return postRes, err

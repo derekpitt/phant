@@ -18,11 +18,11 @@ var (
 func setup() {
   mux = http.NewServeMux()
   server = httptest.NewServer(mux)
+  serverUrlParsed, _ := url.Parse(server.URL)
+  serverUrl = serverUrlParsed.String() + "/"
+  defaultEndpointPrefix = serverUrl
 
   client = Create("public", "private")
-  serverUrlParsed, _ := url.Parse(server.URL)
-  serverUrl = serverUrlParsed.String()
-  client.endpointPrefix = serverUrl + "/"
 }
 
 func teardown() {

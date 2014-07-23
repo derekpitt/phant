@@ -27,7 +27,7 @@ quick data poster for [http://data.sparkfun.com](http://data.sparkfun.com)
 # TODO:
 
 1. read X-Rate-Limit- headers
-2. Create method
+2. <del>CreateStream method</del>
 3. <del>Clear method</del>
 4. <del>Delete method</del>
 5. Getting Data
