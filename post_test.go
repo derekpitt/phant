@@ -32,8 +32,4 @@ func TestPost_Fail(t *testing.T) {
   if err == nil {
     t.Error("expected error")
   }
-
-  if err.Error() != "not ok" {
-    t.Error("expected 'not ok' in .Error()")
-  }
 }

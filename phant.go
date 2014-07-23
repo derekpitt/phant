@@ -30,7 +30,7 @@ func (e standardError) Error() string {
 }
 
 const (
-  defaultEndpointPrefix = "http://data.sparkfun.com/input/"
+  defaultEndpointPrefix = "https://data.sparkfun.com/"
   version               = "derekpitt/phant/0.0.1"
 )
 
@@ -42,10 +42,6 @@ func Create(publicKey, privateKey string) *Client {
 
     endpointPrefix: defaultEndpointPrefix,
   }
-}
-
-func (c *Client) postUrl() string {
-  return c.endpointPrefix + c.publicKey
 }
 
 func convertMapStringStringToUrlValues(f map[string]string) url.Values {

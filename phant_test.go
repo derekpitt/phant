@@ -9,9 +9,10 @@ import (
 )
 
 var (
-  mux    *http.ServeMux
-  server *httptest.Server
-  client *Client
+  mux       *http.ServeMux
+  server    *httptest.Server
+  client    *Client
+  serverUrl string
 )
 
 func setup() {
@@ -19,8 +20,9 @@ func setup() {
   server = httptest.NewServer(mux)
 
   client = Create("public", "private")
-  url, _ := url.Parse(server.URL)
-  client.endpointPrefix = url.String() + "/"
+  serverUrlParsed, _ := url.Parse(server.URL)
+  serverUrl = serverUrlParsed.String()
+  client.endpointPrefix = serverUrl + "/"
 }
 
 func teardown() {
@@ -52,4 +54,28 @@ func handleError() {
     w.WriteHeader(http.StatusBadRequest)
     fmt.Fprintf(w, `{"success":false,"message":"not ok"}`)
   })
+}
+
+func TestParseErrorResponse(t *testing.T) {
+  setup()
+  defer teardown()
+
+  handleError()
+
+  req, err := createHttpRequest("POST", serverUrl, nil)
+
+  if err != nil {
+    t.Error("expected no error when creating request")
+  }
+
+  _, err = doAndParseRequest(req)
+
+  if err == nil {
+    t.Error("expected error in doAndParseRequest")
+  }
+
+  if err.Error() != "not ok" {
+    t.Error("expected 'not ok' in .Error()")
+  }
+
 }

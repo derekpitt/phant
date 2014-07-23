@@ -4,26 +4,26 @@ import (
   "testing"
 )
 
-func TestClear_Success(t *testing.T) {
+func TestDelete_Success(t *testing.T) {
   setup()
   defer teardown()
 
   handleSuccess()
 
-  err := client.Clear()
+  err := client.Delete("123")
 
   if err != nil {
     t.Error("expected no error")
   }
 }
 
-func TestClear_Fail(t *testing.T) {
+func TestDelete_Fail(t *testing.T) {
   setup()
   defer teardown()
 
   handleError()
 
-  err := client.Clear()
+  err := client.Delete("123")
 
   if err == nil {
     t.Error("expected error")

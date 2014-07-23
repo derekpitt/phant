@@ -1,7 +1,7 @@
 package phant
 
 func (c *Client) clearUrl() string {
-  return c.endpointPrefix + c.publicKey + "/clear"
+  return c.endpointPrefix + "input/" + c.publicKey + "/clear"
 }
 
 // Clear will clear the stream
