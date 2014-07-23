@@ -45,7 +45,7 @@ func Create(publicKey, privateKey string) *Client {
   }
 }
 
-func convertMapStringStringToUrlValues(f map[string]string) url.Values {
+func convertMapStringStringToURLValues(f map[string]string) url.Values {
   v := url.Values{}
 
   for fK, fV := range f {
@@ -55,7 +55,7 @@ func convertMapStringStringToUrlValues(f map[string]string) url.Values {
   return v
 }
 
-func createHttpRequest(reqType, url string, reader io.Reader) (*http.Request, error) {
+func createHTTPRequest(reqType, url string, reader io.Reader) (*http.Request, error) {
   request, err := http.NewRequest(reqType, url, reader)
 
   if err == nil {
@@ -67,8 +67,8 @@ func createHttpRequest(reqType, url string, reader io.Reader) (*http.Request, er
   return request, err
 }
 
-func (c *Client) createHttpRequestWithPrivateKey(reqType, url string, reader io.Reader) (*http.Request, error) {
-  request, err := createHttpRequest(reqType, url, reader)
+func (c *Client) createHTTPRequestWithPrivateKey(reqType, url string, reader io.Reader) (*http.Request, error) {
+  request, err := createHTTPRequest(reqType, url, reader)
 
   if err == nil {
     request.Header.Set("Phant-Private-Key", c.privateKey)

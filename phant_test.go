@@ -12,15 +12,15 @@ var (
   mux       *http.ServeMux
   server    *httptest.Server
   client    *Client
-  serverUrl string
+  serverURL string
 )
 
 func setup() {
   mux = http.NewServeMux()
   server = httptest.NewServer(mux)
-  serverUrlParsed, _ := url.Parse(server.URL)
-  serverUrl = serverUrlParsed.String() + "/"
-  defaultEndpointPrefix = serverUrl
+  serverURLParsed, _ := url.Parse(server.URL)
+  serverURL = serverURLParsed.String() + "/"
+  defaultEndpointPrefix = serverURL
 
   client = Create("public", "private")
 }
@@ -62,7 +62,7 @@ func TestParseErrorResponse(t *testing.T) {
 
   handleError()
 
-  req, err := createHttpRequest("POST", serverUrl, nil)
+  req, err := createHTTPRequest("POST", serverURL, nil)
 
   if err != nil {
     t.Error("expected no error when creating request")

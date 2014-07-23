@@ -5,6 +5,7 @@ import (
   "strings"
 )
 
+// CreateResponse will hold information about a created stream
 type CreateResponse struct {
   Success bool   `json:"success"`
   Message string `json:"message"`
@@ -14,13 +15,14 @@ type CreateResponse struct {
   DeleteKey  string `json:"deleteKey"`
 }
 
+// CreateStream creates a stream
 func CreateStream(title, description string, tags []string, fields []string, hidden bool) (CreateResponse, error) {
   var hiddenFormFalue = "0"
   if hidden == true {
     hiddenFormFalue = "1"
   }
 
-  bodyReader := strings.NewReader(convertMapStringStringToUrlValues(map[string]string{
+  bodyReader := strings.NewReader(convertMapStringStringToURLValues(map[string]string{
     "title":       title,
     "description": description,
     "hidden":      hiddenFormFalue,
@@ -30,7 +32,7 @@ func CreateStream(title, description string, tags []string, fields []string, hid
   }).Encode())
 
   var createRes = CreateResponse{}
-  req, err := createHttpRequest("POST", defaultEndpointPrefix+"streams", bodyReader)
+  req, err := createHTTPRequest("POST", defaultEndpointPrefix+"streams", bodyReader)
 
   if err != nil {
     return createRes, err
