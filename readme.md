@@ -2,7 +2,7 @@
 
 quick data poster for [http://data.sparkfun.com](http://data.sparkfun.com)
 
-## example
+## post data example
 
     package main
 
@@ -18,6 +18,32 @@ quick data poster for [http://data.sparkfun.com](http://data.sparkfun.com)
       if err != nil {
         // dang..
       }
+    }
+
+## get data example
+
+    package main
+
+    import (
+      "fmt"
+      "github.com/derekpitt/phant"
+    )
+
+    // define what fields are in the stream here
+    type testType struct {
+      Derek     string
+      Test      string
+      Timestamp string
+    }
+
+    func main() {
+      // declare your data holder to be an array!
+      var d []testType
+
+      // don't forget to use your address operator here! (&)
+      phant.AllData("RMMW22NWWzh6oj1NyADE", &d)
+
+      fmt.Printf("%#v", d)
     }
 
 # Docs
