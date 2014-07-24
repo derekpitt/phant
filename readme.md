@@ -30,5 +30,5 @@ quick data poster for [http://data.sparkfun.com](http://data.sparkfun.com)
 2. <del>CreateStream method</del>
 3. <del>Clear method</del>
 4. <del>Delete method</del>
-5. Getting Data
+5. <del>Getting Data</del>
 6. <del>Stats</del>
