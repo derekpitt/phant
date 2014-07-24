@@ -12,13 +12,13 @@ func TestStats_ReturnACorrectResponse(t *testing.T) {
 
   mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusOK)
-    fmt.Fprintf(w, `{"pageCount":1,"remaining":2,"used":3,"cap":4}`)
+    fmt.Fprintf(w, `{"pageCount":1,"remaining":2,"used":3,"cap":"4"}`)
   })
 
   res, err := Stats("123")
 
   if err != nil {
-    t.Error("expected no error")
+    t.Error("expected no error: " + err.Error())
   }
 
   if res.PageCount != 1 {
