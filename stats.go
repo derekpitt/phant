@@ -29,7 +29,7 @@ func Stats(publicKey string) (StatsResponse, error) {
 	}
 
 	var tmp = tempStatsResponse{}
-	err = decodeJsonAndClose(req, &tmp)
+	_, err = decodeJsonAndClose(req, &tmp)
 
 	if err != nil {
 		return statsRes, err

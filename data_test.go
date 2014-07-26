@@ -88,3 +88,39 @@ func TestDataOnPage_ReturnACorrectResponse(t *testing.T) {
 		t.Error("expected 4 in [1].Test")
 	}
 }
+
+func TestAllData_HandlesA404(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/output/12345.json", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, `{"success":false,"message":"notfound"}`)
+	})
+
+	var results []testType
+	err := AllData("12345", &results)
+
+	if err == nil {
+		t.Error("expected error to not be nil")
+	}
+
+}
+
+func TestDataOnPage_HandlesA404(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/output/12345.json", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, `{"success":false,"message":"notfound"}`)
+	})
+
+	var results []testType
+	err := DataOnPage("12345", 2, &results)
+
+	if err == nil {
+		t.Error("expected error to not be nil")
+	}
+
+}

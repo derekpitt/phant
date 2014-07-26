@@ -78,7 +78,7 @@ func (c *Client) createHTTPRequestWithPrivateKey(reqType, url string, reader io.
 
 func doAndParseRequest(request *http.Request) (standardResponse, error) {
 	postRes := standardResponse{}
-	err := decodeJsonAndClose(request, &postRes)
+	_, err := decodeJsonAndClose(request, &postRes)
 
 	if err != nil {
 		return postRes, err
@@ -92,14 +92,15 @@ func doAndParseRequest(request *http.Request) (standardResponse, error) {
 	return postRes, nil
 }
 
-func decodeJsonAndClose(request *http.Request, v interface{}) error {
+func decodeJsonAndClose(request *http.Request, v interface{}) (statusCode int, err error) {
 	client := &http.Client{}
 	res, err := client.Do(request)
+	statusCode = res.StatusCode
 
 	if err != nil {
-		return err
+		return
 	}
 
 	defer res.Body.Close()
-	return json.NewDecoder(res.Body).Decode(&v)
+	return statusCode, json.NewDecoder(res.Body).Decode(&v)
 }

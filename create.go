@@ -37,7 +37,7 @@ func CreateStream(title, description string, tags []string, fields []string, hid
 		return createRes, err
 	}
 
-	err = decodeJsonAndClose(req, &createRes)
+	_, err = decodeJsonAndClose(req, &createRes)
 
 	if err != nil {
 		return createRes, err
