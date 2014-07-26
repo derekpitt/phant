@@ -1,35 +1,35 @@
 package phant
 
 import (
-  "testing"
+	"testing"
 )
 
 func TestPost_Success(t *testing.T) {
-  setup()
-  defer teardown()
+	setup()
+	defer teardown()
 
-  handleSuccess()
+	handleSuccess()
 
-  err := client.Post(map[string]string{
-    "pow": "pow",
-  })
+	err := client.Post(map[string]string{
+		"pow": "pow",
+	})
 
-  if err != nil {
-    t.Error("expected no error")
-  }
+	if err != nil {
+		t.Error("expected no error")
+	}
 }
 
 func TestPost_Fail(t *testing.T) {
-  setup()
-  defer teardown()
+	setup()
+	defer teardown()
 
-  handleError()
+	handleError()
 
-  err := client.Post(map[string]string{
-    "pow": "pow",
-  })
+	err := client.Post(map[string]string{
+		"pow": "pow",
+	})
 
-  if err == nil {
-    t.Error("expected error")
-  }
+	if err == nil {
+		t.Error("expected error")
+	}
 }

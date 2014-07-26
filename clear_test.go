@@ -1,31 +1,31 @@
 package phant
 
 import (
-  "testing"
+	"testing"
 )
 
 func TestClear_Success(t *testing.T) {
-  setup()
-  defer teardown()
+	setup()
+	defer teardown()
 
-  handleSuccess()
+	handleSuccess()
 
-  err := client.Clear()
+	err := client.Clear()
 
-  if err != nil {
-    t.Error("expected no error")
-  }
+	if err != nil {
+		t.Error("expected no error")
+	}
 }
 
 func TestClear_Fail(t *testing.T) {
-  setup()
-  defer teardown()
+	setup()
+	defer teardown()
 
-  handleError()
+	handleError()
 
-  err := client.Clear()
+	err := client.Clear()
 
-  if err == nil {
-    t.Error("expected error")
-  }
+	if err == nil {
+		t.Error("expected error")
+	}
 }

@@ -1,31 +1,31 @@
 package phant
 
 import (
-  "testing"
+	"testing"
 )
 
 func TestDelete_Success(t *testing.T) {
-  setup()
-  defer teardown()
+	setup()
+	defer teardown()
 
-  handleSuccess()
+	handleSuccess()
 
-  err := client.Delete("123")
+	err := client.Delete("123")
 
-  if err != nil {
-    t.Error("expected no error")
-  }
+	if err != nil {
+		t.Error("expected no error")
+	}
 }
 
 func TestDelete_Fail(t *testing.T) {
-  setup()
-  defer teardown()
+	setup()
+	defer teardown()
 
-  handleError()
+	handleError()
 
-  err := client.Delete("123")
+	err := client.Delete("123")
 
-  if err == nil {
-    t.Error("expected error")
-  }
+	if err == nil {
+		t.Error("expected error")
+	}
 }
